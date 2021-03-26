@@ -1,9 +1,15 @@
 const express = require('express');
 const app= express();
+app.set('view engine', 'pug');
+app.set('views', 'views');
 
-app.get('/makers/:nombre',(req, res)=>{
-   let name=req.params.nombre.charAt(0).toUpperCase()+req.params.nombre.slice(1) || "Desconocido"
-    res.send(`<h1>Hola ${name}!</h1>`);
-});
+// app.get('/',(req, res)=>{
+//     let ens= ['1 soy impar','2 soy par']
+//     res.send(`<p>${ens}!</p>`);
+// });
 
+app.get('/', (req, res) => {
+    res.render('index');
+  });
+  
 app.listen(3000, () => console.log('Linstening on port 3000!'));
