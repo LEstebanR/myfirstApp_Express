@@ -8,8 +8,8 @@ mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost:27017/test', { 
 mongoose.connection.on("error", function(e){console.error(e);});
 
 const visitorSchema = mongoose.Schema({
-  date:{type: date, default: Date.now},
-  name:{type:string, default: "Anónimo"},
+  date:{type: Date, default: Date.now},
+  name:{type:String, default: "Anónimo"},
 })
 
 const Visitor = mongoose.model("Visitor", visitorSchema);
