@@ -4,8 +4,8 @@ const app= express();
 // app.set('views', 'views');
 // app.use(express.urlencoded());
 const mongoose=require("mongoose");
-mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost:27017/test', { useNewUrlParser: true });
-mongoose.connection.on{"error", function(e){console.error(e);}};
+mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology:true });
+mongoose.connection.on("error", function(e){console.error(e);});
 
 const visitorSchema = mongoose.Schema({
   date:{type: date, default: Date.now},
