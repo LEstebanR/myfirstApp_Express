@@ -7,24 +7,37 @@ const mongoose=require("mongoose");
 mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology:true });
 mongoose.connection.on("error", function(e){console.error(e);});
 
+// let elements= Visitor.count;
+
 const visitorSchema = mongoose.Schema({
   date:{type: Date, default: Date.now},
   name:{type:String, default: "Anónimo"},
+  count:{type:Number, default:1}
 })
 
+
 const Visitor = mongoose.model("Visitor", visitorSchema);
+
 
 app.get('/', (req, res) => {
   const name = req.query.name;
   Visitor.create({...(name ? {name}:{})}, function(err){
     if (err) return console.error(err);
-    res.send('<h1>El visitante fue almacenado con éxito</h1>')
-
+    res.send('<table></table>')
+    
   })
 });
 
+// Visitor.find(function(err, articles) {
+//   if (err) return console.error(err);
+//   console.log(articles))
+// });
+
+
+
 
 app.listen(3000, () => console.log('Linstening on port 3000!'));
+
 
 
 
