@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
   const name = req.query.name;
   Visitor.create({...(name ? {name}:{})}, function(err){
     if (err) return console.error(err);
-    res.send('<table><tr></tr></tr></table>')
+    res.send('<table><td><tr>Id</tr><tr>Name</tr><tr>Visits</tr></td></table>')
     
   })
 });
