@@ -1,8 +1,8 @@
 const express = require('express');
 const app= express();
-app.set('view engine', 'pug');
-app.set('views', 'views');
-app.use(express.urlencoded());
+// app.set('view engine', 'pug');
+// app.set('views', 'views');
+// app.use(express.urlencoded());
 const mongoose=require("mongoose");
 mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology:true });
 mongoose.connection.on("error", function(e){console.error(e);});
@@ -26,7 +26,7 @@ app.get('/', async (req, res) => {
   if(existVisitor && visitorName){
     await countVisits(visitorName).catch((error) => console.error(error))
   }else{
-    await Visitor.create({name: visitorName}).catch((error) => console.error(error)) 
+    await Visitor.create({name: visitorName, count:1}).catch((error) => console.error(error)) 
   }
 
 
@@ -37,7 +37,7 @@ app.get('/', async (req, res) => {
 })
 
 function countVisits(visitorName){
-  Visitors.findOne({ nme: visitorName}, function (err, visitor){
+  Visitors.findOne({ name: visitorName}, function (err, visitor){
     if (err) return console.error(error)
     visitor.count += 1;
     visitor.save(function(err){
