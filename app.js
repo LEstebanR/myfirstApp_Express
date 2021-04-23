@@ -1,33 +1,50 @@
 const express = require('express');
 const app= express();
-// app.set('view engine', 'pug');
-// app.set('views', 'views');
-// app.use(express.urlencoded());
+app.set('view engine', 'pug');
+app.set('views', 'views');
+app.use(express.urlencoded());
 const mongoose=require("mongoose");
 mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology:true });
 mongoose.connection.on("error", function(e){console.error(e);});
 
+
 // let elements= Visitor.count;
 
-const visitorSchema = mongoose.Schema({
-  date:{type: Date, default: Date.now},
+var Schema = mongoose.Schema({
+  // date:{type: Date, default: Date.now},
   name:{type:String, default: "Anónimo"},
   count:{type:Number, default:1}
 })
 
 
-const Visitor = mongoose.model("Visitor", visitorSchema);
+var Visitor = mongoose.model("Visitor", Schema);
 
 
-app.get('/', (req, res) => {
-  const name = req.query.name;
-  Visitor.create({...(name ? {name}:{})}, function(err){
-    if (err) return console.error(err);
-    res.send('<table><td><tr>Id</tr><tr>Name</tr><tr>Visits</tr></td></table>')
-    
+app.get('/', async (req, res) => {
+  const visitorName = req.query.name;
+  const existVisitor = await Visitor.findOne({name: visitorName}).catch((error)=> console.error(error))
+  if(existVisitor && visitorName){
+    await countVisits(visitorName).catch((error) => console.error(error))
+  }else{
+    await Visitor.create({name: visitorName}).catch((error) => console.error(error)) 
+  }
+
+
+  await Visitor.find(function (err, visitors){
+    if (err) return console.error(err, visitors)
+    res.render('table', {visitors: visitors})
   })
-});
+})
 
+function countVisits(visitorName){
+  Visitors.findOne({ nme: visitorName}, function (err, visitor){
+    if (err) return console.error(error)
+    visitor.count += 1;
+    visitor.save(function(err){
+      if (err) return console.error(error)
+    })
+  })
+}
 // Visitor.find(function(err, articles) {
 //   if (err) return console.error(err);
 //   console.log(articles))
