@@ -1,8 +1,8 @@
 const express = require('express');
 const app= express();
-// app.set('view engine', 'pug');
-// app.set('views', 'views');
-// app.use(express.urlencoded());
+app.set('view engine', 'pug');
+app.set('views', 'views');
+app.use(express.urlencoded());
 const mongoose=require("mongoose");
 mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology:true });
 mongoose.connection.on("error", function(e){console.error(e);});
