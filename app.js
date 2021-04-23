@@ -26,7 +26,7 @@ app.get('/', async (req, res) => {
   if(existVisitor && visitorName){
     await countVisits(visitorName).catch((error) => console.error(error))
   }else{
-    await Visitor.create({name: visitorName, count:1}).catch((error) => console.error(error)) 
+    await Visitor.create({name: visitorName}).catch((error) => console.error(error)) 
   }
 
 
@@ -37,11 +37,11 @@ app.get('/', async (req, res) => {
 })
 
 function countVisits(visitorName){
-  Visitors.findOne({ name: visitorName}, function (err, visitor){
+  Visitor.findOne({ name: visitorName}, function (err, visitor){
     if (err) return console.error(error)
     visitor.count += 1;
     visitor.save(function(err){
-      if (err) return console.error(error)
+      if (err) return console.log(error)
     })
   })
 }
