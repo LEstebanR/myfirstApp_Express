@@ -1,23 +1,24 @@
 const express = require('express');
 const app= express();
+const mongoose=require("mongoose");
+
 app.set('view engine', 'pug');
 app.set('views', 'views');
 app.use(express.urlencoded());
-const mongoose=require("mongoose");
+
 mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology:true });
 mongoose.connection.on("error", function(e){console.error(e);});
 
 
-// let elements= Visitor.count;
 
-var Schema = mongoose.Schema({
-  // date:{type: Date, default: Date.now},
+
+var schema = mongoose.Schema({
   name:{type:String, default: "Anónimo"},
   count:{type:Number, default:1}
-})
+});
 
 
-var Visitor = mongoose.model("Visitor", Schema);
+var Visitor = mongoose.model("Visitor", schema);
 
 
 app.get('/', async (req, res) => {
@@ -26,7 +27,7 @@ app.get('/', async (req, res) => {
   if(existVisitor && visitorName){
     await countVisits(visitorName).catch((error) => console.error(error))
   }else{
-    await Visitor.create({name: visitorName}).catch((error) => console.error(error)) 
+    await Visitor.create({name: visitorName, count:1}).catch((error) => console.error(error)); 
   }
 
 
@@ -41,42 +42,9 @@ function countVisits(visitorName){
     if (err) return console.error(error)
     visitor.count += 1;
     visitor.save(function(err){
-      if (err) return console.log(error)
+      if (err) return console.error(error)
     })
   })
 }
-// Visitor.find(function(err, articles) {
-//   if (err) return console.error(err);
-//   console.log(articles))
-// });
-
-
-
 
 app.listen(3000, () => console.log('Linstening on port 3000!'));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// app.get('/',(req, res)=>{
-//     let ens= ['1 soy impar','2 soy par']
-//     res.send(`<p>${ens}!</p>`);
-// });
-
-// app.get('/', (req, res) => {
-//     res.render('index');
-// });
-
-// app.post('/hello',(req,res)=>{
-//   res.send("<h1>Hola "+req.body.name+"!</h1>")
-// })
