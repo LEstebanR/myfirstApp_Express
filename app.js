@@ -17,22 +17,23 @@ var UserSchema= new mongoose.Schema({
 
 var User = mongoose.model("User", UserSchema);
 
+
+
 app.get('/', (req, res) => {
   res.render('index');
 });
 
 app.get('/register', (req, res) => {
   res.render('register');
+  
 });
 
 app.post('/register', async (req,res)=>{
-  const user = new users ({name: req.query.name, email: req.query.mail, password: req.query.password})
-  await user.save()
-  res.render('/usersreg')
+  await User.create({name:req.body.name, email:req.body.email}).catch(error=>{console.error(error)})
+  await User.find(function (err,user){
+  res.render('data',{User:User})
+
+  })
 })
-
-
-
-
 
 app.listen(3000, () => console.log('Linstening on port 3000!'));
