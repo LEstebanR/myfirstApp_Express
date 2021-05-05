@@ -30,10 +30,10 @@ app.get('/register', async (req, res) => {
 
 app.post('/register', async (req,res)=>{
   await User.create({name:req.body.name, email:req.body.email}).catch(error=>{console.error(error)})
-  await User.find(function (err,user){res.render('data',{User:user})})
-
-}
-)
+  const users = await User.find();
+  res.render('data',{User:user}).catch(error=>{console.error(error)})})
 
 
-app.listen(3000, () => console.log('Linstening on port 3000!'));
+
+
+app.listen(3000, () => console.log('Linstening on port 3000!'))
